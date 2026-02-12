@@ -70,12 +70,13 @@
         .price-item { background: rgba(255, 255, 255, 0.02); padding: 18px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-left: 5px solid var(--neon-purple); cursor: pointer; }
         .back-arrow { font-size: 26px; color: var(--neon-blue); cursor: pointer; margin-right: 15px; }
 
+        /* --- Account Grid --- */
+        .acc-grid-card { background: var(--glass); border-radius: 20px; overflow: hidden; border: 1px solid #222; margin-bottom: 15px; position: relative; }
+        .grid-img { width: 100%; border-radius: 12px; height: 120px; object-fit: cover; margin-top: 10px; border: 1px solid #333; }
+        .sold-out-badge { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); display: flex; justify-content: center; align-items: center; color: #ff0000; font-size: 28px; font-weight: 900; z-index: 10; transform: rotate(-10deg); border: 3px solid #ff0000; pointer-events: none; }
+
         /* --- Admin --- */
         .admin-input { width: 100%; padding: 15px; margin-bottom: 15px; background: #0a0a0a; border: 1px solid #222; color: white; border-radius: 12px; box-sizing: border-box; }
-        .grid-img { width: 100%; border-radius: 12px; height: 120px; object-fit: cover; margin-top: 10px; border: 1px solid #333; }
-        
-        /* Sold Out Overlay */
-        .sold-out-badge { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; color: red; font-size: 30px; font-weight: 900; border-radius: 24px; z-index: 10; transform: rotate(-15deg); border: 4px solid red; pointer-events: none; }
     </style>
 </head>
 <body>
@@ -108,12 +109,16 @@
         <header><span class="back-arrow" onclick="nav('main-page')">←</span><h2>MLBB Diamonds</h2></header>
         <div class="price-item" onclick="orderTG('Weekly Pass', '6,500')"><span>Weekly Pass</span> <b>6,500 MMK</b></div>
         <div class="price-item" onclick="orderTG('86 Diamonds', '4,800')"><span>86 Diamonds</span> <b>4,800 MMK</b></div>
-        <div class="price-item" onclick="orderTG('172 Diamonds', '9,600')"><span>172 Diamonds</span> <b>9,600 MMK</b></div>
     </div>
 
     <div id="acc-page" class="page">
         <header><span class="back-arrow" onclick="nav('main-page')">←</span><h2>MLBB Accounts</h2></header>
         <div id="acc-list"></div>
+    </div>
+
+    <div id="acc-details-page" class="page">
+        <header><span class="back-arrow" onclick="nav('acc-page')">←</span><h2>Account Details</h2></header>
+        <div id="details-content"></div>
     </div>
 
     <div id="tg-page" class="page">
@@ -188,23 +193,42 @@
             const list = document.getElementById('acc-list');
             if(!data) { list.innerHTML = `<p style="text-align:center;color:#444;margin-top:50px;">No Item Available</p>`; return; }
             
+            // Acc Page မှာ ပုံတစ်ပုံတည်းနဲ့ Title ပဲပြမယ်
             list.innerHTML = `
-                <div style="background:var(--glass); border-radius:24px; overflow:hidden; border:1px solid #222; position:relative;">
+                <div class="acc-grid-card">
                     ${data.isSold ? '<div class="sold-out-badge">SOLD OUT</div>' : ''}
-                    <img src="${data.imgs[0]}" style="width:100%; height:200px; object-fit:cover;">
-                    <div style="padding:20px;">
-                        <h3 style="color:var(--neon-blue);">${data.title}</h3>
-                        <p style="color:#aaa;">${data.desc}</p>
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                            ${data.imgs.map(i => `<img src="${i}" class="grid-img">`).join('')}
-                        </div>
-                        <button class="btn-buy" style="width:100%; margin-top:20px;" onclick="orderAcc('${data.title}')">CONTACT TO BUY</button>
+                    <img src="${data.imgs[0]}" style="width:100%; height:180px; object-fit:cover;">
+                    <div style="padding:15px; display:flex; justify-content:space-between; align-items:center;">
+                        <h3 style="margin:0; font-size:16px; color:var(--neon-blue);">${data.title}</h3>
+                        <button class="btn-buy" style="padding:8px 15px; font-size:11px;" onclick="viewDetails()">VIEW ACC</button>
                     </div>
                 </div>`;
         }
 
-        function orderAcc(title) {
-            const msg = `Hello KIMO Shop,%0A%0AI want to buy this MLBB Account: ${title}%0A%0A(I am interested in the images shown in the shop)%0A%0APlease let me know the payment details.`;
+        // View Acc နှိပ်မှ အကုန်ပြမယ့် function
+        function viewDetails() {
+            const data = JSON.parse(localStorage.getItem('kimo_data'));
+            const content = document.getElementById('details-content');
+            content.innerHTML = `
+                <div style="background:var(--glass); border-radius:24px; overflow:hidden; border:1px solid #222; position:relative;">
+                    ${data.isSold ? '<div class="sold-out-badge">SOLD OUT</div>' : ''}
+                    <img src="${data.imgs[0]}" style="width:100%; height:220px; object-fit:cover;">
+                    <div style="padding:20px;">
+                        <h3 style="color:var(--neon-blue); margin:0;">${data.title}</h3>
+                        <p style="color:#aaa; font-size:14px; margin:15px 0; line-height:1.6;">${data.desc}</p>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                            ${data.imgs.map(i => `<img src="${i}" class="grid-img">`).join('')}
+                        </div>
+                        <button class="btn-buy" style="width:100%; margin-top:25px; height:50px; font-size:15px;" onclick="orderAcc()">CONTACT TO BUY</button>
+                    </div>
+                </div>`;
+            nav('acc-details-page');
+        }
+
+        function orderAcc() {
+            const data = JSON.parse(localStorage.getItem('kimo_data'));
+            if(!data) return;
+            let msg = `Hello KIMO Shop,%0A%0A--- MLBB Account Order ---%0AAccount Title: ${data.title}%0A%0A--- Payment Info ---%0AKpay: 09752949393%0A%0Aငွေလွှဲပြီးရင် Screenshot ပြပေးပါမယ်။`;
             window.location.href = `https://t.me/Ironman2005born?text=${msg}`;
         }
     </script>
