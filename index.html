@@ -79,27 +79,37 @@
             font-size: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase;
         }
 
+        /* Payment Info Box Inside Game Pages */
+        .pay-guide {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--neon-blue);
+            padding: 15px; border-radius: 20px; margin-bottom: 20px;
+        }
+        .pay-guide h4 { margin: 0 0 10px 0; color: var(--neon-blue); font-size: 13px; }
+        .pay-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; }
+
         .price-item { 
             background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; 
             display: flex; justify-content: space-between; align-items: center; 
             margin-bottom: 12px; border-left: 4px solid var(--neon-blue);
         }
-
-        /* Logic Inputs Styling */
         .order-input-box { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); padding: 20px; border-radius: 20px; margin-bottom: 20px; }
+        .admin-input { width: 100%; padding: 15px; margin-bottom: 12px; background: #000; border: 1px solid #444; color: white; border-radius: 15px; box-sizing: border-box; }
 
+        /* Acc Shop Styling */
         .acc-post { background: var(--glass); border-radius: 28px; padding: 18px; border: 1px solid var(--card-border); margin-bottom: 25px; position: relative; }
-        .preview-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 20px; }
-        
+        .preview-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 20px; }
         .sold-badge-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; border-radius: 28px; z-index: 5; }
         .sold-stamp { border: 5px solid #ff0055; color: #ff0055; font-size: 2.5rem; font-weight: 900; padding: 15px; transform: rotate(-15deg); }
 
         .adm-tabs { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 25px; padding: 5px; }
         .adm-tab { background: #111; padding: 12px 20px; border-radius: 15px; cursor: pointer; white-space: nowrap; border: 1px solid #333; }
         .adm-tab.active { background: var(--neon-blue); color: black; font-weight: bold; }
-        .admin-input { width: 100%; padding: 15px; margin-bottom: 12px; background: #000; border: 1px solid #444; color: white; border-radius: 15px; box-sizing: border-box; }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050508; z-index: 2000; overflow-y: auto; padding: 30px; }
+        /* Modern Centered Modal Details */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050508; z-index: 2000; overflow-y: auto; padding: 20px; box-sizing: border-box; }
+        .detail-wrapper { max-width: 600px; margin: auto; display: flex; flex-direction: column; align-items: center; }
+        .detail-img-container { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 20px; }
+        .detail-img { width: 100%; max-width: 500px; border-radius: 15px; border: 1px solid #333; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
@@ -147,103 +157,119 @@
         </div>
     </div>
 
+    <template id="pay-template">
+        <div class="pay-guide">
+            <h4>💳 ငွေလွဲရန် အကောင့်များ</h4>
+            <div class="pay-row"><span id="p1-name"></span>: <b id="p1-num"></b></div>
+            <div class="pay-row"><span id="p2-name"></span>: <b id="p2-num"></b></div>
+        </div>
+    </template>
+
     <div id="mlbb-page" class="page">
         <header><button class="back-btn" onclick="nav('main-page')">← BACK</button><div class="shop-title">MLBB</div></header>
+        <div id="mlbb-pay-box"></div>
         <div class="order-input-box">
             <input type="text" id="mlbb-id" class="admin-input" placeholder="Player ID">
             <input type="text" id="mlbb-sr" class="admin-input" placeholder="Server ID">
-            <input type="number" id="mlbb-pay5" class="admin-input" placeholder="ငွေလွဲနောက်ဆုံးဂဏန်း ၅ လုံး">
+            <input type="number" id="mlbb-pay5" class="admin-input" placeholder="ငွေလွဲနောက်ဆုံး ၅ လုံး">
         </div>
         <div id="list-mlbb"></div>
     </div>
 
     <div id="pubg-page" class="page">
         <header><button class="back-btn" onclick="nav('main-page')">← BACK</button><div class="shop-title">PUBG</div></header>
+        <div id="pubg-pay-box"></div>
         <div class="order-input-box">
             <input type="text" id="pubg-id" class="admin-input" placeholder="Character ID">
-            <input type="number" id="pubg-pay5" class="admin-input" placeholder="ငွေလွဲနောက်ဆုံးဂဏန်း ၅ လုံး">
+            <input type="number" id="pubg-pay5" class="admin-input" placeholder="ငွေလွဲနောက်ဆုံး ၅ လုံး">
         </div>
         <div id="list-pubg"></div>
     </div>
 
     <div id="heartopia-page" class="page">
         <header><button class="back-btn" onclick="nav('main-page')">← BACK</button><div class="shop-title">HEARTOPIA</div></header>
+        <div id="heartopia-pay-box"></div>
         <div class="order-input-box">
             <input type="text" id="heartopia-id" class="admin-input" placeholder="Game ID">
-            <input type="number" id="heartopia-pay5" class="admin-input" placeholder="ငွေလွဲနောက်ဆုံးဂဏန်း ၅ လုံး">
+            <input type="number" id="heartopia-pay5" class="admin-input" placeholder="ငွေလွဲနောက်ဆုံး ၅ လုံး">
         </div>
         <div id="list-heartopia"></div>
     </div>
 
     <div id="tg-page" class="page">
         <header><button class="back-btn" onclick="nav('main-page')">← BACK</button><div class="shop-title">TELEGRAM</div></header>
+        <div id="tg-pay-box"></div>
         <div class="order-input-box">
             <input type="text" id="tg-id" class="admin-input" placeholder="Username/Phone">
-            <input type="number" id="tg-pay5" class="admin-input" placeholder="ငွေလွဲနောက်ဆုံးဂဏန်း ၅ လုံး">
+            <input type="number" id="tg-pay5" class="admin-input" placeholder="ငွေလွဲနောက်ဆုံး ၅ လုံး">
         </div>
         <div id="list-tg"></div>
     </div>
 
-    <div id="acc-page" class="page"><header><button class="back-btn" onclick="nav('main-page')">← BACK</button><div class="shop-title">ACCOUNTS</div></header><div id="list-acc"></div></div>
+    <div id="acc-page" class="page">
+        <header><button class="back-btn" onclick="nav('main-page')">← BACK</button><div class="shop-title">ACCOUNTS</div></header>
+        <div id="list-acc"></div>
+    </div>
 
     <div id="admin-page" class="page">
-        <header><button class="back-btn" onclick="nav('main-page')">← EXIT ADMIN</button><div class="shop-title">ADMIN</div></header>
+        <header><button class="back-btn" onclick="nav('main-page')">← EXIT</button><div class="shop-title">ADMIN</div></header>
         <div class="adm-tabs">
             <div class="adm-tab active" onclick="switchAdm(this,'prices')">Pricing</div>
-            <div class="adm-tab" onclick="switchAdm(this,'visuals')">Visuals & TG</div>
-            <div class="adm-tab" onclick="switchAdm(this,'acc')">Post Account</div>
-            <div class="adm-tab" onclick="switchAdm(this,'manage')">Manage Sold</div>
+            <div class="adm-tab" onclick="switchAdm(this,'visuals')">Visuals & Pay</div>
+            <div class="adm-tab" onclick="switchAdm(this,'acc')">Post Acc</div>
+            <div class="adm-tab" onclick="switchAdm(this,'manage')">Manage</div>
         </div>
 
         <div id="adm-prices" class="adm-sec">
-            <div class="adm-tabs" style="background:rgba(255,255,255,0.05); padding:10px; border-radius:15px;">
-                <div onclick="currCat='mlbb'; renderPriceEdit()">MLBB</div>
-                <div onclick="currCat='pubg'; renderPriceEdit()">PUBG</div>
-                <div onclick="currCat='heartopia'; renderPriceEdit()">Heartopia</div>
-                <div onclick="currCat='tg'; renderPriceEdit()">TG</div>
-            </div>
-            <div id="price-edit-area"></div>
-            <button class="buy-pill" style="width:100%" onclick="addItem()">+ Add New Item</button>
+            <div class="adm-tabs"><div onclick="currCat='mlbb';renderPriceEdit()">MLBB</div><div onclick="currCat='pubg';renderPriceEdit()">PUBG</div><div onclick="currCat='heartopia';renderPriceEdit()">Heart</div><div onclick="currCat='tg';renderPriceEdit()">TG</div></div>
+            <div id="price-edit-area"></div><button class="buy-pill" onclick="addItem()">+ Add Item</button>
         </div>
 
         <div id="adm-visuals" class="adm-sec" style="display:none">
-            <p>Telegram Username: <input type="text" id="t-tglink" class="admin-input" placeholder="Example: kimo_admin (No @)"></p>
-            <p>Payment Method: <input type="text" id="p-method" class="admin-input" placeholder="e.g. KPay / Wave"></p>
-            <p>Payment Number: <input type="text" id="p-number" class="admin-input" placeholder="09xxxxxxxxx"></p>
-            <p>Main BG: <input type="file" id="f-bg" class="admin-input"></p>
-            <p>Logo: <input type="file" id="f-logo" class="admin-input"></p>
+            <input type="text" id="t-tglink" class="admin-input" placeholder="Admin TG Username">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <input type="text" id="p1-m" class="admin-input" placeholder="Pay 1 Name">
+                <input type="text" id="p1-n" class="admin-input" placeholder="Number 1">
+                <input type="text" id="p2-m" class="admin-input" placeholder="Pay 2 Name">
+                <input type="text" id="p2-n" class="admin-input" placeholder="Number 2">
+            </div>
             <p>Slide 1: <input type="file" id="f-s0" class="admin-input"><input type="text" id="t-s0" class="admin-input" placeholder="Text 1"></p>
             <p>Slide 2: <input type="file" id="f-s1" class="admin-input"><input type="text" id="t-s1" class="admin-input" placeholder="Text 2"></p>
             <p>Slide 3: <input type="file" id="f-s2" class="admin-input"><input type="text" id="t-s2" class="admin-input" placeholder="Text 3"></p>
-            <button class="buy-pill" style="width:100%" onclick="saveVisuals()">Update All Settings</button>
+            <p>Logo: <input type="file" id="f-logo" class="admin-input"> BG: <input type="file" id="f-bg" class="admin-input"></p>
+            <button class="buy-pill" style="width:100%" onclick="saveVisuals()">Update Settings</button>
         </div>
 
         <div id="adm-acc" class="adm-sec" style="display:none">
-            <input type="text" id="a-title" class="admin-input" placeholder="Account Name">
-            <textarea id="a-desc" class="admin-input" placeholder="Description Details" style="height:120px;"></textarea>
+            <input type="text" id="a-title" class="admin-input" placeholder="Acc Name">
+            <textarea id="a-desc" class="admin-input" placeholder="Details" style="height:100px;"></textarea>
             <input type="file" id="a-imgs" class="admin-input" multiple>
-            <button class="buy-pill" style="width:100%" onclick="postAcc()">Publish Post</button>
+            <button class="buy-pill" style="width:100%" onclick="postAcc()">Publish</button>
         </div>
 
         <div id="adm-manage" class="adm-sec" style="display:none"><div id="admin-sold-list"></div></div>
     </div>
 
-    <div id="detail-modal" class="modal"><div id="detail-content"></div><button class="buy-pill" style="width:100%; margin-top:30px;" onclick="closeModal()">Return to Shop</button></div>
+    <div id="detail-modal" class="modal">
+        <div class="detail-wrapper" id="detail-content"></div>
+        <div class="detail-wrapper">
+            <button class="buy-pill" style="width:100%; margin-top:20px; background:#333;" onclick="closeModal()">CLOSE DETAILS</button>
+        </div>
+    </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('KIMO_V6_DB')) || {
-            mlbb: [["Weekly Pass","6500"]], pubg: [["60 UC","3500"]],
-            heartopia: [["100 Coins","5000"]], tg: [["Premium 1M","16000"]], accs: []
-        };
+        let db = JSON.parse(localStorage.getItem('KIMO_V10_DB')) || { mlbb: [], pubg: [], heartopia: [], tg: [], accs: [] };
         let currCat = 'mlbb'; let count = 0;
 
         function nav(id) { document.querySelectorAll('.page').forEach(p=>p.classList.remove('active-page')); document.getElementById(id).classList.add('active-page'); window.scrollTo(0,0); }
-        function secretAdmin() { count++; if(count==5){ count=0; nav('admin-page'); renderPriceEdit(); renderAdminAcc(); 
-            document.getElementById('t-tglink').value = localStorage.getItem('k_tglink') || '';
-            document.getElementById('p-method').value = localStorage.getItem('k_pmethod') || '';
-            document.getElementById('p-number').value = localStorage.getItem('k_pnumber') || '';
+        function secretAdmin() { count++; if(count==5){ count=0; nav('admin-page'); renderPriceEdit(); renderAdminAcc();
+            document.getElementById('t-tglink').value = localStorage.getItem('k_tg') || '';
+            document.getElementById('p1-m').value = localStorage.getItem('k_p1m') || '';
+            document.getElementById('p1-n').value = localStorage.getItem('k_p1n') || '';
+            document.getElementById('p2-m').value = localStorage.getItem('k_p2m') || '';
+            document.getElementById('p2-n').value = localStorage.getItem('k_p2n') || '';
         } setTimeout(()=>count=0, 2000); }
-        
+
         function switchAdm(el,sec) {
             document.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active');
             document.querySelectorAll('.adm-sec').forEach(s=>s.style.display='none'); document.getElementById('adm-'+sec).style.display='block';
@@ -252,76 +278,60 @@
         async function procImg(file) { return new Promise(res => { const r = new FileReader(); r.readAsDataURL(file); r.onload = (e) => res(e.target.result); }); }
 
         function renderPriceEdit() {
-            const area = document.getElementById('price-edit-area');
-            area.innerHTML = `<h4>Editing: ${currCat.toUpperCase()}</h4>` + db[currCat].map((item,i) => `
-                <div style="display:flex; gap:10px; margin-bottom:12px;">
+            document.getElementById('price-edit-area').innerHTML = `<h4>Editing: ${currCat.toUpperCase()}</h4>` + db[currCat].map((item,i) => `
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
                     <input class="admin-input" value="${item[0]}" onchange="db['${currCat}'][${i}][0]=this.value; saveDB()">
                     <input class="admin-input" value="${item[1]}" onchange="db['${currCat}'][${i}][1]=this.value; saveDB()">
-                    <button onclick="db['${currCat}'].splice(${i},1); saveDB(); renderPriceEdit()" style="background:#ff0055; color:white; border:none; border-radius:12px; width:50px;">X</button>
-                </div>
-            `).join('');
+                    <button onclick="db['${currCat}'].splice(${i},1); saveDB(); renderPriceEdit()" style="background:red; color:white; border:none; border-radius:10px; width:40px;">X</button>
+                </div>`).join('');
         }
-        function addItem() { db[currCat].push(["New Item","0"]); renderPriceEdit(); saveDB(); }
-        function saveDB() { localStorage.setItem('KIMO_V6_DB', JSON.stringify(db)); renderMain(); }
+        function addItem() { db[currCat].push(["Item","0"]); renderPriceEdit(); saveDB(); }
+        function saveDB() { localStorage.setItem('KIMO_V10_DB', JSON.stringify(db)); renderMain(); }
 
         async function saveVisuals() {
-            const bg = document.getElementById('f-bg').files[0];
-            const lg = document.getElementById('f-logo').files[0];
-            const tg = document.getElementById('t-tglink').value;
-            const pm = document.getElementById('p-method').value;
-            const pn = document.getElementById('p-number').value;
-            
-            if(tg) localStorage.setItem('k_tglink', tg.replace('@',''));
-            if(pm) localStorage.setItem('k_pmethod', pm);
-            if(pn) localStorage.setItem('k_pnumber', pn);
-            if(bg) localStorage.setItem('k_bg', await procImg(bg));
-            if(lg) localStorage.setItem('k_lg', await procImg(lg));
-            for(let i=0; i<3; i++){
+            localStorage.setItem('k_tg', document.getElementById('t-tglink').value.replace('@',''));
+            localStorage.setItem('k_p1m', document.getElementById('p1-m').value);
+            localStorage.setItem('k_p1n', document.getElementById('p1-n').value);
+            localStorage.setItem('k_p2m', document.getElementById('p2-m').value);
+            localStorage.setItem('k_p2n', document.getElementById('p2-n').value);
+            for(let i=0; i<3; i++) {
                 const f = document.getElementById('f-s'+i).files[0];
                 const t = document.getElementById('t-s'+i).value;
                 if(f) localStorage.setItem('k_s'+i, await procImg(f));
                 if(t) localStorage.setItem('k_st'+i, t);
             }
-            alert("Settings Updated!"); location.reload();
-        }
-
-        function sendOrder(cat, item, price) {
-            const user = localStorage.getItem('k_tglink') || "kimo_admin";
-            const pMethod = localStorage.getItem('k_pmethod') || "KPay";
-            const pNumber = localStorage.getItem('k_pnumber') || "09xxxxxxxxx";
-            
-            let info = ""; let p5 = "";
-            if(['MLBB','PUBG','HEARTOPIA','TELEGRAM'].includes(cat)) {
-                const prefix = cat.toLowerCase() === 'telegram' ? 'tg' : cat.toLowerCase();
-                const idInput = document.getElementById(prefix + '-id');
-                const p5Input = document.getElementById(prefix + '-pay5');
-                const srInput = document.getElementById('mlbb-sr');
-                
-                if(!idInput.value || !p5Input.value || (cat === 'MLBB' && !srInput.value)) {
-                    return alert("ကျေးဇူးပြု၍ အချက်အလက်များကို ပြည့်စုံစွာဖြည့်ပါ။");
-                }
-                
-                info = (cat === 'MLBB') ? `ID: ${idInput.value} (${srInput.value})` : `ID: ${idInput.value}`;
-                p5 = p5Input.value;
-            }
-
-            const text = `🛒 **NEW ORDER**\n\n🔹 Item: ${item} (${cat})\n🔹 Price: ${price} MMK\n🔹 ${info}\n\n💳 **Payment Info**\n🔹 ${pMethod}: ${pNumber}\n🔹 Last 5 Digits: ${p5}`;
-            window.open(`https://t.me/${user}?text=${encodeURIComponent(text)}`, '_blank');
+            const bg = document.getElementById('f-bg').files[0];
+            const lg = document.getElementById('f-logo').files[0];
+            if(bg) localStorage.setItem('k_bg', await procImg(bg));
+            if(lg) localStorage.setItem('k_lg', await procImg(lg));
+            alert("Saved!"); location.reload();
         }
 
         function renderMain() {
+            const p1m = localStorage.getItem('k_p1m') || 'KPay';
+            const p1n = localStorage.getItem('k_p1n') || '-';
+            const p2m = localStorage.getItem('k_p2m') || 'Wave';
+            const p2n = localStorage.getItem('k_p2n') || '-';
+
             ['mlbb','pubg','heartopia','tg'].forEach(c => {
-                document.getElementById('list-'+c).innerHTML = db[c].map(i => `<div class="price-item"><span>${i[0]}</span><button class="buy-pill" style="margin-top:0;" onclick="sendOrder('${c.toUpperCase()}', '${i[0]}', '${i[1]}')">${i[1]} MMK</button></div>`).join('');
+                const list = document.getElementById('list-'+c);
+                if(list) list.innerHTML = db[c].map(i => `<div class="price-item"><span>${i[0]}</span><button class="buy-pill" style="margin:0;" onclick="sendOrder('${c.toUpperCase()}', '${i[0]}', '${i[1]}')">${i[1]} MMK</button></div>`).join('');
+                
+                const box = document.getElementById(c + '-pay-box');
+                if(box) {
+                    box.innerHTML = document.getElementById('pay-template').innerHTML;
+                    box.querySelector('#p1-name').innerText = p1m; box.querySelector('#p1-num').innerText = p1n;
+                    box.querySelector('#p2-name').innerText = p2m; box.querySelector('#p2-num').innerText = p2n;
+                }
             });
+
             document.getElementById('list-acc').innerHTML = db.accs.map(a => `
-                <div class="acc-post">
-                    <div class="sold-badge-overlay" style="display:${a.sold?'flex':'none'}"><div class="sold-stamp">SOLD OUT</div></div>
+                <div class="acc-post" onclick="viewDetails(${a.id})">
+                    <div class="sold-badge-overlay" style="display:${a.sold?'flex':'none'}"><div class="sold-stamp">SOLD</div></div>
                     <img src="${a.imgs[0]}" class="preview-img">
-                    <h3 style="margin:15px 0;">${a.t}</h3>
-                    <button class="buy-pill" style="width:100%; margin-top:0;" onclick="viewDetails(${a.id})">VIEW ACCOUNT DETAILS</button>
-                </div>
-            `).join('');
-            
+                    <div style="padding:10px;"><h3>${a.t}</h3><p style="color:var(--neon-blue);">Tap to View Details & Images</p></div>
+                </div>`).join('');
+
             const b = localStorage.getItem('k_bg'); if(b) document.body.style.backgroundImage=`url('${b}')`;
             const l = localStorage.getItem('k_lg'); if(l) document.getElementById('display-logo').src=l;
             for(let i=0; i<3; i++){
@@ -331,36 +341,44 @@
             }
         }
 
+        function sendOrder(cat, item, price) {
+            const user = localStorage.getItem('k_tg') || "admin";
+            let details = ""; let p5 = "";
+            
+            if(cat !== 'ACCOUNT') {
+                const prefix = cat.toLowerCase() === 'telegram' ? 'tg' : cat.toLowerCase();
+                const idVal = document.getElementById(prefix + '-id').value;
+                const p5Val = document.getElementById(prefix + '-pay5').value;
+                if(!idVal || !p5Val) return alert("ID နှင့် ငွေလွဲ ၅ လုံး ဖြည့်ပါ။");
+                details = (cat==='MLBB') ? `ID: ${idVal} (${document.getElementById('mlbb-sr').value})` : `ID: ${idVal}`;
+                p5 = p5Val;
+            }
+
+            const text = `🛒 **NEW ORDER**\n\n🔹 Item: ${item} (${cat})\n🔹 Price: ${price} MMK\n🔹 ${details}\n🔹 Last 5 Digits: ${p5}\n\n(ငွေလွဲ SS ပို့ပေးပါ)`;
+            window.open(`https://t.me/${user}?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
         async function postAcc() {
-            const t = document.getElementById('a-title').value;
-            const d = document.getElementById('a-desc').value;
             const fs = document.getElementById('a-imgs').files;
             let imgs = []; for(let f of fs) imgs.push(await procImg(f));
-            db.accs.unshift({ id:Date.now(), t, d, imgs, sold:false });
-            saveDB(); alert("Account Published!"); location.reload();
+            db.accs.unshift({ id:Date.now(), t:document.getElementById('a-title').value, d:document.getElementById('a-desc').value, imgs, sold:false });
+            saveDB(); alert("Published!"); location.reload();
         }
 
         function renderAdminAcc() {
-            document.getElementById('admin-sold-list').innerHTML = db.accs.map(a => `
-                <div style="background:#111; padding:15px; border-radius:15px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
-                    <span>${a.t}</span>
-                    <button class="buy-pill" style="background:#ff0055; margin-top:0;" onclick="doSold(${a.id})">SOLD</button>
-                </div>
-            `).join('');
+            document.getElementById('admin-sold-list').innerHTML = db.accs.map(a => `<div style="display:flex; justify-content:space-between; padding:10px; background:#111; margin-bottom:5px; border-radius:10px;"><span>${a.t}</span><button onclick="doSold(${a.id})" style="background:red; border:none; border-radius:5px; color:white; padding:5px 10px;">SOLD</button></div>`).join('');
         }
-
-        function doSold(id) {
-            db.accs = db.accs.map(a => a.id === id ? {...a, sold:true} : a);
-            saveDB(); renderMain(); renderAdminAcc();
-        }
-
+        function doSold(id) { db.accs = db.accs.map(a => a.id === id ? {...a, sold:true} : a); saveDB(); renderMain(); renderAdminAcc(); }
+        
         function viewDetails(id) {
             const a = db.accs.find(x => x.id === id);
             document.getElementById('detail-content').innerHTML = `
-                <h2 style="color:var(--neon-blue); font-style:italic;">${a.t}</h2>
-                <p style="white-space:pre-wrap; color:#ccc; line-height:1.6; font-size:14px;">${a.d}</p>
-                <div style="display:grid; gap:15px; margin-top:25px;">${a.imgs.map(i => `<img src="${i}" style="width:100%; border-radius:20px; border:1px solid #333;">`).join('')}</div>
-                <button class="buy-pill" style="width:100%; margin-top:20px;" onclick="sendOrder('ACCOUNT', '${a.t}', 'Special Price')">INQUIRE ON TELEGRAM</button>
+                <h2 style="color:var(--neon-blue); text-align:center; margin-bottom:10px;">${a.t}</h2>
+                <div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:15px; white-space:pre-wrap; width:100%; box-sizing:border-box; border:1px solid #333; line-height:1.6;">${a.d}</div>
+                <div class="detail-img-container">
+                    ${a.imgs.map(i => `<img src="${i}" class="detail-img">`).join('')}
+                </div>
+                <button class="buy-pill" style="width:100%; height:55px; font-size:16px; margin-top:30px;" onclick="sendOrder('ACCOUNT', '${a.t}', 'Special Price')">INQUIRE ON TELEGRAM</button>
             `;
             document.getElementById('detail-modal').style.display='block';
         }
