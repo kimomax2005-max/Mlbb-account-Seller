@@ -3,88 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KIMO SHOP | Cloud Edition</title>
+    <title>KIMO SHOP | Professional Cloud</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
     <style>
         :root { --blue: #00d2ff; --pink: #bc13fe; --glass: rgba(255, 255, 255, 0.05); }
-        body { margin: 0; background: #050508; color: white; font-family: sans-serif; background-size: cover; background-position: center; background-attachment: fixed; }
+        body { margin: 0; background: #050508; color: white; font-family: sans-serif; background-size: cover; background-position: center; background-attachment: fixed; transition: 0.5s; }
         #loader { position: fixed; width: 100%; height: 100vh; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
-        .page { display: none; padding: 20px; max-width: 800px; margin: auto; }
+        .page { display: none; padding: 20px; max-width: 800px; margin: auto; animation: fadeIn 0.5s; }
         .active-page { display: block; }
-        header { display: flex; align-items: center; justify-content: center; margin-bottom: 30px; position: relative; padding-top: 20px; }
-        .back-btn { position: absolute; left: 0; background: var(--glass); border: 1px solid #333; color: white; padding: 8px; border-radius: 10px; cursor: pointer; }
-        .k-logo { width: 60px; height: 60px; border-radius: 15px; border: 2px solid var(--blue); overflow: hidden; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        header { display: flex; align-items: center; justify-content: center; padding: 20px 0; position: relative; }
+        .k-logo { width: 65px; height: 65px; border-radius: 18px; border: 2px solid var(--blue); overflow: hidden; box-shadow: 0 0 15px rgba(0,210,255,0.3); }
         .k-logo img { width: 100%; height: 100%; object-fit: cover; }
-        .shop-title { margin-left: 15px; font-size: 24px; font-weight: bold; cursor: pointer; }
-        
-        /* Slider */
-        .slider-container { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin-bottom: 30px; border: 1px solid #333; }
-        .slides { display: flex; width: 300%; height: 100%; transition: 0.8s; }
+        .shop-title { margin-left: 15px; font-size: 26px; font-weight: 900; letter-spacing: 1px; cursor: pointer; }
+        .slider-container { width: 100%; aspect-ratio: 16/9; border-radius: 25px; overflow: hidden; margin-bottom: 30px; border: 1px solid #333; }
+        .slides { display: flex; width: 300%; height: 100%; transition: 0.8s cubic-bezier(0.45, 0, 0.55, 1); }
         .slide { width: 100%; height: 100%; background-size: cover; background-position: center; }
-
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card { background: var(--glass); border: 1px solid #222; padding: 20px; border-radius: 20px; text-align: center; cursor: pointer; }
-        .buy-btn { width: 100%; background: linear-gradient(90deg, var(--blue), var(--pink)); border: none; color: white; padding: 12px; border-radius: 50px; font-weight: bold; margin-top: 10px; cursor: pointer; }
-        
-        .admin-input { width: 100%; padding: 12px; margin-bottom: 10px; background: #111; border: 1px solid #333; color: white; border-radius: 10px; box-sizing: border-box; }
-        .price-row { display: flex; gap: 5px; margin-bottom: 5px; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; padding: 20px; overflow-y: auto; }
+        .card { background: var(--glass); border: 1px solid #222; padding: 20px; border-radius: 22px; text-align: center; cursor: pointer; backdrop-filter: blur(10px); }
+        .buy-btn { width: 100%; background: linear-gradient(90deg, var(--blue), var(--pink)); border: none; color: white; padding: 14px; border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .admin-input { width: 100%; padding: 14px; margin-bottom: 12px; background: #111; border: 1px solid #333; color: white; border-radius: 12px; box-sizing: border-box; }
+        .price-row { display: flex; gap: 8px; margin-bottom: 8px; }
     </style>
 </head>
 <body>
 
-<div id="loader"><h2>KIMO SHOP</h2><p>Syncing Data...</p></div>
+<div id="loader"><h2>KIMO SHOP</h2><p>Initialing Cloud Sync...</p></div>
 
 <div id="main-page" class="page active-page">
     <header>
-        <div class="k-logo"><img id="display-logo" src="https://placehold.co/100x100?text=LOGO"></div>
+        <div class="k-logo"><img id="display-logo" src="https://placehold.co/100x100?text=K"></div>
         <div class="shop-title" onclick="secretAdmin()">KIMO SHOP</div>
     </header>
 
     <div class="slider-container">
         <div class="slides" id="slide-track">
-            <div id="s0" class="slide" style="background-image:url('https://placehold.co/600x400?text=Slide1')"></div>
-            <div id="s1" class="slide" style="background-image:url('https://placehold.co/600x400?text=Slide2')"></div>
-            <div id="s2" class="slide" style="background-image:url('https://placehold.co/600x400?text=Slide3')"></div>
+            <div id="s0" class="slide" style="background-image:url('https://placehold.co/800x450?text=Slide+1')"></div>
+            <div id="s1" class="slide" style="background-image:url('https://placehold.co/800x450?text=Slide+2')"></div>
+            <div id="s2" class="slide" style="background-image:url('https://placehold.co/800x450?text=Slide+3')"></div>
         </div>
     </div>
 
     <div class="grid">
-        <div class="card" onclick="nav('mlbb-page')"><h3>MLBB</h3><button class="buy-btn">BUY</button></div>
-        <div class="card" onclick="nav('pubg-page')"><h3>PUBG</h3><button class="buy-btn">BUY</button></div>
+        <div class="card" onclick="nav('mlbb-page')"><h3>MLBB</h3><p>Diamonds Topup</p><button class="buy-btn">BUY NOW</button></div>
+        <div class="card" onclick="nav('pubg-page')"><h3>PUBG</h3><p>UC Topup</p><button class="buy-btn" style="background:var(--pink)">BUY NOW</button></div>
     </div>
-    <button class="buy-btn" style="margin-top:20px;" onclick="nav('acc-page')">VIEW ACCOUNT SHOP</button>
 </div>
 
 <div id="mlbb-page" class="page">
-    <header><button class="back-btn" onclick="nav('main-page')">BACK</button><div class="shop-title">MLBB</div></header>
-    <div id="mlbb-prices"></div>
-</div>
-
-<div id="acc-page" class="page">
-    <header><button class="back-btn" onclick="nav('main-page')">BACK</button><div class="shop-title">ACCOUNTS</div></header>
-    <div id="acc-list"></div>
+    <header><button onclick="nav('main-page')" style="position:absolute;left:0;background:none;border:1px solid #444;color:white;padding:8px 15px;border-radius:10px;">BACK</button><div class="shop-title">MLBB</div></header>
+    <div id="mlbb-list"></div>
 </div>
 
 <div id="admin-page" class="page">
-    <header><div class="shop-title">ADMIN PANEL</div></header>
-    <h3>Visuals & Payment</h3>
-    <input type="text" id="adm-logo" class="admin-input" placeholder="Logo Link">
-    <input type="text" id="adm-bg" class="admin-input" placeholder="Background Link">
-    <input type="text" id="adm-p1" class="admin-input" placeholder="KPay Number">
+    <header><div class="shop-title">CLOUD ADMIN</div></header>
     
-    <h3>Slide Images (3 Pdfs)</h3>
-    <input type="text" id="adm-s0" class="admin-input" placeholder="Slide 1 Image Link">
-    <input type="text" id="adm-s1" class="admin-input" placeholder="Slide 2 Image Link">
-    <input type="text" id="adm-s2" class="admin-input" placeholder="Slide 3 Image Link">
+    <label>Logo & Background Links</label>
+    <input type="text" id="adm-logo" class="admin-input" placeholder="Logo Direct Link">
+    <input type="text" id="adm-bg" class="admin-input" placeholder="Body Background Link">
 
-    <h3>Edit MLBB Prices</h3>
+    <label>Slide Images (3 Photos)</label>
+    <input type="text" id="adm-s0" class="admin-input" placeholder="Slide 1 Link">
+    <input type="text" id="adm-s1" class="admin-input" placeholder="Slide 2 Link">
+    <input type="text" id="adm-s2" class="admin-input" placeholder="Slide 3 Link">
+
+    <label>Edit MLBB Items</label>
     <div id="mlbb-edit-area"></div>
-    <button onclick="addPriceItem('mlbb')" class="buy-btn" style="background:#333">+ Add Row</button>
+    <button onclick="addPrice('mlbb')" class="buy-btn" style="background:#333; width:auto; padding:8px 20px;">+ Add Item</button>
 
-    <button class="buy-btn" style="background:green; margin-top:30px;" onclick="saveCloud()">SAVE ALL TO CLOUD</button>
-    <button class="buy-btn" style="background:#444;" onclick="nav('main-page')">EXIT</button>
+    <button class="buy-btn" style="background:green; margin-top:40px; height:60px; font-size:18px;" onclick="saveCloud()">SAVE ALL TO CLOUD</button>
+    <button class="buy-btn" style="background:#222;" onclick="nav('main-page')">EXIT ADMIN</button>
 </div>
 
 <script>
@@ -99,23 +88,21 @@
     };
 
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.database().ref('kimo_data_v2');
+    const db = firebase.database().ref('kimo_main_data');
 
     let kData = {
-        logo: '', bg: '', p1: '',
-        s0: '', s1: '', s2: '',
-        mlbb: [{name: '86 Diamonds', price: '2500'}],
-        accs: []
+        logo: '', bg: '', s0: '', s1: '', s2: '',
+        mlbb: [{name: 'Sample 86 Diamonds', price: '2500'}],
+        pubg: []
     };
 
-    // Firebase Sync
+    // Firebase Listener
     db.on('value', (snap) => {
-        if(snap.val()) kData = snap.val();
-        renderUI();
+        if(snap.val()) {
+            kData = snap.val();
+            renderUI();
+        }
         document.getElementById('loader').style.display = 'none';
-    }, (err) => {
-        console.log(err);
-        document.getElementById('loader').innerHTML = "Check Database Rules!";
     });
 
     function renderUI() {
@@ -125,57 +112,49 @@
         if(kData.s1) document.getElementById('s1').style.backgroundImage = `url('${kData.s1}')`;
         if(kData.s2) document.getElementById('s2').style.backgroundImage = `url('${kData.s2}')`;
 
-        const mlbbArea = document.getElementById('mlbb-prices');
-        mlbbArea.innerHTML = kData.mlbb.map(i => `
-            <div style="display:flex; justify-content:space-between; padding:15px; background:var(--glass); margin-bottom:10px; border-radius:15px;">
+        document.getElementById('mlbb-list').innerHTML = (kData.mlbb || []).map(i => `
+            <div style="display:flex; justify-content:space-between; padding:18px; background:var(--glass); margin-bottom:10px; border-radius:18px; border:1px solid #222;">
                 <span>${i.name}</span>
                 <b style="color:var(--blue)">${i.price} MMK</b>
             </div>
         `).join('');
     }
 
-    // Admin Logic
     let clicks = 0;
     function secretAdmin() {
         clicks++;
         if(clicks >= 5) { nav('admin-page'); loadAdmin(); clicks = 0; }
-        setTimeout(() => clicks = 0, 2000);
+        setTimeout(() => clicks = 0, 2500);
     }
 
     function loadAdmin() {
         document.getElementById('adm-logo').value = kData.logo || '';
         document.getElementById('adm-bg').value = kData.bg || '';
-        document.getElementById('adm-p1').value = kData.p1 || '';
         document.getElementById('adm-s0').value = kData.s0 || '';
         document.getElementById('adm-s1').value = kData.s1 || '';
         document.getElementById('adm-s2').value = kData.s2 || '';
-        renderEditPrices();
+        renderEditArea();
     }
 
-    function renderEditPrices() {
-        document.getElementById('mlbb-edit-area').innerHTML = kData.mlbb.map((i, idx) => `
+    function renderEditArea() {
+        document.getElementById('mlbb-edit-area').innerHTML = (kData.mlbb || []).map((i, idx) => `
             <div class="price-row">
                 <input class="admin-input" value="${i.name}" onchange="kData.mlbb[${idx}].name=this.value">
                 <input class="admin-input" value="${i.price}" onchange="kData.mlbb[${idx}].price=this.value">
-                <button onclick="kData.mlbb.splice(${idx},1); renderEditPrices()" style="background:red; border:none; color:white; border-radius:5px;">X</button>
+                <button onclick="kData.mlbb.splice(${idx},1); renderEditArea()" style="background:red;border:none;color:white;border-radius:10px;padding:0 15px;margin-bottom:12px;">X</button>
             </div>
         `).join('');
     }
 
-    function addPriceItem(cat) {
-        kData[cat].push({name: 'New Item', price: '0'});
-        renderEditPrices();
-    }
+    function addPrice(cat) { kData[cat].push({name: 'New Item', price: '0'}); renderEditArea(); }
 
     function saveCloud() {
         kData.logo = document.getElementById('adm-logo').value;
         kData.bg = document.getElementById('adm-bg').value;
-        kData.p1 = document.getElementById('adm-p1').value;
         kData.s0 = document.getElementById('adm-s0').value;
         kData.s1 = document.getElementById('adm-s1').value;
         kData.s2 = document.getElementById('adm-s2').value;
-
-        db.set(kData).then(() => alert("Cloud Synced!"));
+        db.set(kData).then(() => alert("Cloud Synced Successfully!"));
     }
 
     function nav(id) {
@@ -183,13 +162,12 @@
         document.getElementById(id).classList.add('active-page');
     }
 
-    // Auto Slider
-    let curS = 0;
+    // Slider Engine
+    let cur = 0;
     setInterval(() => {
-        curS = (curS + 1) % 3;
-        document.getElementById('slide-track').style.transform = `translateX(-${curS * 33.33}%)`;
-    }, 3000);
+        cur = (cur + 1) % 3;
+        document.getElementById('slide-track').style.transform = `translateX(-${cur * 33.33}%)`;
+    }, 4000);
 </script>
 </body>
 </html>
-
