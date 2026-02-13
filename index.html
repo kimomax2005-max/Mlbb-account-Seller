@@ -32,6 +32,7 @@
         .price-item { background: rgba(0, 0, 0, 0.5); padding: 18px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-left: 5px solid var(--neon-purple); cursor: pointer; backdrop-filter: blur(10px); }
         .btn-buy { background: var(--neon-blue); color: #000; padding: 10px 25px; border-radius: 15px; font-weight: 900; border: none; }
 
+        /* Admin UI */
         .admin-nav-tabs { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 20px; padding-bottom: 5px; }
         .adm-tab { background: #222; color: #777; padding: 10px 18px; border-radius: 10px; border: none; cursor: pointer; white-space: nowrap; }
         .adm-tab.active { background: var(--neon-blue); color: #000; font-weight: bold; }
@@ -39,12 +40,14 @@
         .admin-input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid #333; color: white; border-radius: 10px; box-sizing: border-box; }
         .row-edit { display: grid; grid-template-columns: 2fr 1fr auto; gap: 8px; margin-bottom: 8px; }
 
+        /* Acc Post */
         .acc-post { background: var(--glass); border-radius: 20px; margin-bottom: 20px; padding: 15px; border: 1px solid #333; backdrop-filter: blur(10px); }
         .acc-img-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
         .acc-img-grid img { width: 100%; border-radius: 10px; aspect-ratio: 1/1; object-fit: cover; }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: #111; border: 1px solid var(--neon-blue); border-radius: 25px; padding: 25px; width: 100%; max-width: 350px; text-align: center; }
+        /* Modal Center Fix */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        .modal-content { background: #111; border: 1px solid var(--neon-blue); border-radius: 25px; padding: 25px; width: 100%; max-width: 350px; text-align: center; box-shadow: 0 0 20px rgba(0, 210, 255, 0.2); }
         .kpay-box { background: #000; border: 1px dashed #555; padding: 15px; border-radius: 15px; margin: 15px 0; color: var(--neon-blue); font-size: 20px; font-weight: bold; }
     </style>
 </head>
@@ -80,7 +83,7 @@
     <div id="acc-page" class="page"><header><span onclick="nav('main-page')">←</span><h2 style="margin-left:15px">Accounts</h2></header><div id="acc-list"></div></div>
 
     <div id="admin-page" class="page">
-        <header><span onclick="nav('main-page')">←</span><h2 style="margin-left:15px">Admin</h2></header>
+        <header><span onclick="nav('main-page')">←</span><h2 style="margin-left:15px">Admin Panel</h2></header>
         <div class="admin-nav-tabs">
             <button class="adm-tab active" onclick="switchAdmTab(this,'prices')">Prices</button>
             <button class="adm-tab" onclick="switchAdmTab(this,'visuals')">Visuals</button>
@@ -121,16 +124,25 @@
         </div>
     </div>
 
-    <div id="pay-modal" class="modal"><div class="modal-content"><h3 id="ord-title"></h3><div class="kpay-box" id="mod-num"></div><div id="mod-name" style="font-weight:bold;margin-bottom:20px"></div><button class="btn-buy" style="width:100%" onclick="copyAndGo()">COPY & ORDER</button><button onclick="closeModal()" style="background:none;border:none;color:#555;margin-top:15px">CANCEL</button></div></div>
+    <div id="pay-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="ord-title"></h3>
+            <p id="ord-price" style="color:var(--neon-purple); font-weight:bold;"></p>
+            <div class="kpay-box" id="mod-num"></div>
+            <div id="mod-name" style="font-weight:bold;margin-bottom:20px"></div>
+            <button class="btn-buy" style="width:100%" onclick="copyAndGo()">COPY & ORDER</button>
+            <button onclick="closeModal()" style="background:none;border:none;color:#555;margin-top:15px">CANCEL</button>
+        </div>
+    </div>
 
     <script>
-        let shopData = JSON.parse(localStorage.getItem('kimo_final_v1')) || {
+        let shopData = JSON.parse(localStorage.getItem('kimo_final_v2')) || {
             MLBB: [["Weekly Pass","6500"],["86 Dia","4800"],["172 Dia","9600"],["257 Dia","14400"],["344 Dia","19200"],["429 Dia","24000"],["706 Dia","38500"]],
             PUBG: [["60 UC","3800"],["325 UC","16500"],["660 UC","32000"]],
             HEARTOPIA: [["60 Gems","3500"],["300 Gems","16500"]], TG: [["1 Month","16500"],["1 Year","135000"]]
         };
-        let accountPosts = JSON.parse(localStorage.getItem('kimo_acc_v1')) || [];
-        let curPriceTab = 'MLBB'; let count = 0;
+        let accountPosts = JSON.parse(localStorage.getItem('kimo_acc_v2')) || [];
+        let curPriceTab = 'MLBB'; let count = 0; let activeOrder = {};
 
         function nav(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(id).classList.add('active-page'); }
         function secretAdmin() { count++; if(count==5){ count=0; nav('admin-page'); renderPriceEditor(); } setTimeout(()=>count=0, 3000); }
@@ -143,14 +155,14 @@
         function renderPriceEditor() {
             const container = document.getElementById('price-editor-rows'); container.innerHTML = `<h4>Editing ${curPriceTab}</h4>`;
             shopData[curPriceTab].forEach((item, idx) => {
-                container.innerHTML += `<div class="row-edit"><input type="text" class="admin-input" value="${item[0]}" onchange="editItem(${idx},0,this.value)"><input type="number" class="admin-input" value="${item[1]}" onchange="editItem(${idx},1,this.value)"><button onclick="delItem(${idx})" style="background:red;border:none;color:white;border-radius:8px">X</button></div>`;
+                container.innerHTML += `<div class="row-edit"><input type="text" class="admin-input" value="${item[0]}" onchange="editItem(${idx},0,this.value)"><input type="number" class="admin-input" value="${item[1]}" onchange="editItem(${idx},1,this.value)"><button onclick="delItem(${idx})" style="background:red;border:none;color:white;border-radius:8px;width:30px">X</button></div>`;
             });
             container.innerHTML += `<button onclick="addItem()" class="admin-input">+ Add Item</button>`;
-            localStorage.setItem('kimo_final_v1', JSON.stringify(shopData)); renderUserView();
+            localStorage.setItem('kimo_final_v2', JSON.stringify(shopData)); renderUserView();
         }
         function editItem(i,c,v) { shopData[curPriceTab][i][c]=v; renderPriceEditor(); }
         function delItem(i) { shopData[curPriceTab].splice(i,1); renderPriceEditor(); }
-        function addItem() { shopData[curPriceTab].push(["New", "0"]); renderPriceEditor(); }
+        function addItem() { shopData[curPriceTab].push(["New Item", "0"]); renderPriceEditor(); }
 
         async function compressImage(file) {
             return new Promise((resolve) => {
@@ -159,10 +171,10 @@
                     const img = new Image(); img.src = event.target.result;
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 800; const scale = MAX_WIDTH / img.width;
+                        const MAX_WIDTH = 600; const scale = MAX_WIDTH / img.width;
                         canvas.width = MAX_WIDTH; canvas.height = img.height * scale;
                         const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        resolve(canvas.toDataURL('image/jpeg', 0.6)); // 0.6 quality reduces size 
+                        resolve(canvas.toDataURL('image/jpeg', 0.5)); 
                     };
                 };
             });
@@ -180,15 +192,15 @@
                     if(f) localStorage.setItem('k_sl_i'+i, await compressImage(f));
                     if(t) localStorage.setItem('k_sl_t'+i, t);
                 }
-                alert("Visuals Saved!"); location.reload();
-            } catch (e) { alert("Error: Image too large! Try a smaller image."); }
+                alert("Settings Saved!"); location.reload();
+            } catch (e) { alert("LocalStorage Full! Please clear some account posts."); }
         }
 
         function savePay() {
             localStorage.setItem('p_t', document.getElementById('adm-pay-type').value);
             localStorage.setItem('p_n', document.getElementById('adm-pay-num').value);
             localStorage.setItem('p_u', document.getElementById('adm-pay-name').value);
-            alert("Saved!");
+            alert("Payment Saved!");
         }
 
         async function postAccount() {
@@ -200,28 +212,36 @@
                 let imgs = [];
                 for(let f of files) imgs.push(await compressImage(f));
                 accountPosts.push({ title, desc, imgs });
-                localStorage.setItem('kimo_acc_v1', JSON.stringify(accountPosts));
+                localStorage.setItem('kimo_acc_v2', JSON.stringify(accountPosts));
                 alert("Posted!"); renderUserView();
-            } catch (e) { alert("Error: Post too large!"); }
+                document.getElementById('ac-title').value = ''; document.getElementById('ac-desc').value = '';
+            } catch (e) { alert("LocalStorage Full! Delete old posts first."); }
         }
 
-        function clearAccounts() { if(confirm("Clear all?")){ localStorage.removeItem('kimo_acc_v1'); accountPosts = []; renderUserView(); } }
+        function clearAccounts() { if(confirm("Clear all accounts?")){ localStorage.removeItem('kimo_acc_v2'); accountPosts = []; renderUserView(); } }
 
-        function openPay(item) {
-            document.getElementById('ord-title').innerText = item;
+        function openPay(game, item, price) {
+            activeOrder = { game, item, price };
+            document.getElementById('ord-title').innerText = `${game} - ${item}`;
+            document.getElementById('ord-price').innerText = `${price} MMK`;
             document.getElementById('mod-num').innerText = localStorage.getItem('p_n') || "09xxxxxx";
-            document.getElementById('mod-name').innerText = "Name: " + (localStorage.getItem('p_u') || "Kimo");
+            document.getElementById('mod-name').innerText = "Name: " + (localStorage.getItem('p_u') || "Admin");
             document.getElementById('pay-modal').style.display = 'flex';
         }
         function closeModal() { document.getElementById('pay-modal').style.display='none'; }
-        function copyAndGo() { navigator.clipboard.writeText(document.getElementById('mod-num').innerText); window.location.href=`https://t.me/Ironman2005born?text=Order: ${document.getElementById('ord-title').innerText}`; }
+        
+        function copyAndGo() { 
+            navigator.clipboard.writeText(document.getElementById('mod-num').innerText); 
+            const msg = `Order Details:%0AGame: ${activeOrder.game}%0AItem: ${activeOrder.item}%0APrice: ${activeOrder.price} MMK`;
+            window.location.href=`https://t.me/Ironman2005born?text=${msg}`; 
+        }
 
         function renderUserView() {
             Object.keys(shopData).forEach(k => {
                 const el = document.getElementById('user-'+k);
-                if(el) el.innerHTML = shopData[k].map(i => `<div class="price-item" onclick="openPay('${k} ${i[0]}')"><span>${i[0]}</span><b>${i[1]} MMK</b></div>`).join('');
+                if(el) el.innerHTML = shopData[k].map(i => `<div class="price-item" onclick="openPay('${k}', '${i[0]}', '${i[1]}')"><span>${i[0]}</span><b>${i[1]} MMK</b></div>`).join('');
             });
-            document.getElementById('acc-list').innerHTML = accountPosts.map(p => `<div class="acc-post"><h3>${p.title}</h3><p style="white-space:pre-wrap;">${p.desc}</p><div class="acc-img-grid">${p.imgs.map(im=>`<img src="${im}">`).join('')}</div><button class="btn-buy" style="width:100%;margin-top:15px" onclick="openPay('ACC: ${p.title}')">BUY THIS ACC</button></div>`).join('');
+            document.getElementById('acc-list').innerHTML = accountPosts.map(p => `<div class="acc-post"><h3>${p.title}</h3><p style="white-space:pre-wrap;">${p.desc}</p><div class="acc-img-grid">${p.imgs.map(im=>`<img src="${im}">`).join('')}</div><button class="btn-buy" style="width:100%;margin-top:15px" onclick="openPay('Account', '${p.title}', 'N/A')">BUY THIS ACC</button></div>`).join('');
             const sBG = localStorage.getItem('k_bg'); if(sBG) { document.body.style.backgroundImage = `url('${sBG}')`; document.getElementById('bg-layer').style.display = 'none'; }
             const sLogo = localStorage.getItem('k_logo'); if(sLogo) document.getElementById('display-logo').src = sLogo;
             for(let i=0; i<3; i++){
@@ -241,4 +261,3 @@
     </script>
 </body>
 </html>
-
