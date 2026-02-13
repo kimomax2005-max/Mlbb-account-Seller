@@ -84,6 +84,10 @@
             display: flex; justify-content: space-between; align-items: center; 
             margin-bottom: 12px; border-left: 4px solid var(--neon-blue);
         }
+
+        /* Logic Inputs Styling */
+        .order-input-box { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); padding: 20px; border-radius: 20px; margin-bottom: 20px; }
+
         .acc-post { background: var(--glass); border-radius: 28px; padding: 18px; border: 1px solid var(--card-border); margin-bottom: 25px; position: relative; }
         .preview-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 20px; }
         
@@ -143,10 +147,43 @@
         </div>
     </div>
 
-    <div id="mlbb-page" class="page"><header><button class="back-btn" onclick="nav('main-page')">← BACK</button><div class="shop-title">MLBB</div></header><div id="list-mlbb"></div></div>
-    <div id="pubg-page" class="page"><header><button class="back-btn" onclick="nav('main-page')">← BACK</button><div class="shop-title">PUBG</div></header><div id="list-pubg"></div></div>
-    <div id="heartopia-page" class="page"><header><button class="back-btn" onclick="nav('main-page')">← BACK</button><div class="shop-title">HEARTOPIA</div></header><div id="list-heartopia"></div></div>
-    <div id="tg-page" class="page"><header><button class="back-btn" onclick="nav('main-page')">← BACK</button><div class="shop-title">TELEGRAM</div></header><div id="list-tg"></div></div>
+    <div id="mlbb-page" class="page">
+        <header><button class="back-btn" onclick="nav('main-page')">← BACK</button><div class="shop-title">MLBB</div></header>
+        <div class="order-input-box">
+            <input type="text" id="mlbb-id" class="admin-input" placeholder="Player ID">
+            <input type="text" id="mlbb-sr" class="admin-input" placeholder="Server ID">
+            <input type="number" id="mlbb-pay5" class="admin-input" placeholder="ငွေလွဲနောက်ဆုံးဂဏန်း ၅ လုံး">
+        </div>
+        <div id="list-mlbb"></div>
+    </div>
+
+    <div id="pubg-page" class="page">
+        <header><button class="back-btn" onclick="nav('main-page')">← BACK</button><div class="shop-title">PUBG</div></header>
+        <div class="order-input-box">
+            <input type="text" id="pubg-id" class="admin-input" placeholder="Character ID">
+            <input type="number" id="pubg-pay5" class="admin-input" placeholder="ငွေလွဲနောက်ဆုံးဂဏန်း ၅ လုံး">
+        </div>
+        <div id="list-pubg"></div>
+    </div>
+
+    <div id="heartopia-page" class="page">
+        <header><button class="back-btn" onclick="nav('main-page')">← BACK</button><div class="shop-title">HEARTOPIA</div></header>
+        <div class="order-input-box">
+            <input type="text" id="heartopia-id" class="admin-input" placeholder="Game ID">
+            <input type="number" id="heartopia-pay5" class="admin-input" placeholder="ငွေလွဲနောက်ဆုံးဂဏန်း ၅ လုံး">
+        </div>
+        <div id="list-heartopia"></div>
+    </div>
+
+    <div id="tg-page" class="page">
+        <header><button class="back-btn" onclick="nav('main-page')">← BACK</button><div class="shop-title">TELEGRAM</div></header>
+        <div class="order-input-box">
+            <input type="text" id="tg-id" class="admin-input" placeholder="Username/Phone">
+            <input type="number" id="tg-pay5" class="admin-input" placeholder="ငွေလွဲနောက်ဆုံးဂဏန်း ၅ လုံး">
+        </div>
+        <div id="list-tg"></div>
+    </div>
+
     <div id="acc-page" class="page"><header><button class="back-btn" onclick="nav('main-page')">← BACK</button><div class="shop-title">ACCOUNTS</div></header><div id="list-acc"></div></div>
 
     <div id="admin-page" class="page">
@@ -171,6 +208,8 @@
 
         <div id="adm-visuals" class="adm-sec" style="display:none">
             <p>Telegram Username: <input type="text" id="t-tglink" class="admin-input" placeholder="Example: kimo_admin (No @)"></p>
+            <p>Payment Method: <input type="text" id="p-method" class="admin-input" placeholder="e.g. KPay / Wave"></p>
+            <p>Payment Number: <input type="text" id="p-number" class="admin-input" placeholder="09xxxxxxxxx"></p>
             <p>Main BG: <input type="file" id="f-bg" class="admin-input"></p>
             <p>Logo: <input type="file" id="f-logo" class="admin-input"></p>
             <p>Slide 1: <input type="file" id="f-s0" class="admin-input"><input type="text" id="t-s0" class="admin-input" placeholder="Text 1"></p>
@@ -199,7 +238,12 @@
         let currCat = 'mlbb'; let count = 0;
 
         function nav(id) { document.querySelectorAll('.page').forEach(p=>p.classList.remove('active-page')); document.getElementById(id).classList.add('active-page'); window.scrollTo(0,0); }
-        function secretAdmin() { count++; if(count==5){ count=0; nav('admin-page'); renderPriceEdit(); renderAdminAcc(); document.getElementById('t-tglink').value = localStorage.getItem('k_tglink') || ''; } setTimeout(()=>count=0, 2000); }
+        function secretAdmin() { count++; if(count==5){ count=0; nav('admin-page'); renderPriceEdit(); renderAdminAcc(); 
+            document.getElementById('t-tglink').value = localStorage.getItem('k_tglink') || '';
+            document.getElementById('p-method').value = localStorage.getItem('k_pmethod') || '';
+            document.getElementById('p-number').value = localStorage.getItem('k_pnumber') || '';
+        } setTimeout(()=>count=0, 2000); }
+        
         function switchAdm(el,sec) {
             document.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active');
             document.querySelectorAll('.adm-sec').forEach(s=>s.style.display='none'); document.getElementById('adm-'+sec).style.display='block';
@@ -224,7 +268,12 @@
             const bg = document.getElementById('f-bg').files[0];
             const lg = document.getElementById('f-logo').files[0];
             const tg = document.getElementById('t-tglink').value;
+            const pm = document.getElementById('p-method').value;
+            const pn = document.getElementById('p-number').value;
+            
             if(tg) localStorage.setItem('k_tglink', tg.replace('@',''));
+            if(pm) localStorage.setItem('k_pmethod', pm);
+            if(pn) localStorage.setItem('k_pnumber', pn);
             if(bg) localStorage.setItem('k_bg', await procImg(bg));
             if(lg) localStorage.setItem('k_lg', await procImg(lg));
             for(let i=0; i<3; i++){
@@ -238,7 +287,25 @@
 
         function sendOrder(cat, item, price) {
             const user = localStorage.getItem('k_tglink') || "kimo_admin";
-            const text = `🛒 **NEW ORDER**\n\n🔹 Game/Service: ${cat}\n🔹 Item: ${item}\n🔹 Price: ${price} MMK\n\n------------------\nPlayer ID & Server (သို့) လိုအပ်တာများ ဒီမှာ ရေးပေးပါ -`;
+            const pMethod = localStorage.getItem('k_pmethod') || "KPay";
+            const pNumber = localStorage.getItem('k_pnumber') || "09xxxxxxxxx";
+            
+            let info = ""; let p5 = "";
+            if(['MLBB','PUBG','HEARTOPIA','TELEGRAM'].includes(cat)) {
+                const prefix = cat.toLowerCase() === 'telegram' ? 'tg' : cat.toLowerCase();
+                const idInput = document.getElementById(prefix + '-id');
+                const p5Input = document.getElementById(prefix + '-pay5');
+                const srInput = document.getElementById('mlbb-sr');
+                
+                if(!idInput.value || !p5Input.value || (cat === 'MLBB' && !srInput.value)) {
+                    return alert("ကျေးဇူးပြု၍ အချက်အလက်များကို ပြည့်စုံစွာဖြည့်ပါ။");
+                }
+                
+                info = (cat === 'MLBB') ? `ID: ${idInput.value} (${srInput.value})` : `ID: ${idInput.value}`;
+                p5 = p5Input.value;
+            }
+
+            const text = `🛒 **NEW ORDER**\n\n🔹 Item: ${item} (${cat})\n🔹 Price: ${price} MMK\n🔹 ${info}\n\n💳 **Payment Info**\n🔹 ${pMethod}: ${pNumber}\n🔹 Last 5 Digits: ${p5}`;
             window.open(`https://t.me/${user}?text=${encodeURIComponent(text)}`, '_blank');
         }
 
@@ -285,7 +352,6 @@
         function doSold(id) {
             db.accs = db.accs.map(a => a.id === id ? {...a, sold:true} : a);
             saveDB(); renderMain(); renderAdminAcc();
-            setTimeout(() => { db.accs = db.accs.filter(a => a.id !== id); saveDB(); renderMain(); renderAdminAcc(); }, 5000);
         }
 
         function viewDetails(id) {
