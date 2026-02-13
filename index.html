@@ -18,24 +18,20 @@
         @keyframes spin { 100% { transform: rotate(360deg); } }
         #percent { font-size: 14px; margin-top: 10px; color: var(--neon-blue); font-family: monospace; }
 
-        /* Logo & Header */
         header { display: flex; align-items: center; margin-bottom: 25px; }
         .k-logo-container { width: 45px; height: 45px; border-radius: 12px; overflow: hidden; display: flex; justify-content: center; align-items: center; margin-right: 15px; background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue)); border: 1px solid rgba(255,255,255,0.2); }
         .k-logo-container img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Slider Fixed 16:9 */
         .slider-wrapper { padding: 3px; border-radius: 28px; background: linear-gradient(135deg, var(--neon-blue), transparent, var(--neon-purple)); margin-bottom: 30px; }
         .slider-container { width: 100%; aspect-ratio: 16/9; border-radius: 25px; overflow: hidden; position: relative; background: #000; }
         .slides { display: flex; width: 300%; height: 100%; transition: transform 0.8s ease; }
         .slide { width: 100%; height: 100%; background-size: cover; background-position: center; display: flex; align-items: flex-end; }
         .slide-overlay { width: 100%; padding: 15px; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); font-weight: bold; color: var(--neon-blue); font-size: 14px; }
 
-        /* Cards & Price Items */
         .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 22px; border-radius: 24px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; backdrop-filter: blur(15px); cursor: pointer; }
         .price-item { background: rgba(0, 0, 0, 0.5); padding: 18px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-left: 5px solid var(--neon-purple); cursor: pointer; backdrop-filter: blur(10px); }
         .btn-buy { background: var(--neon-blue); color: #000; padding: 10px 25px; border-radius: 15px; font-weight: 900; border: none; }
 
-        /* Admin UI */
         .admin-nav-tabs { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 20px; padding-bottom: 5px; }
         .adm-tab { background: #222; color: #777; padding: 10px 18px; border-radius: 10px; border: none; cursor: pointer; white-space: nowrap; }
         .adm-tab.active { background: var(--neon-blue); color: #000; font-weight: bold; }
@@ -43,12 +39,10 @@
         .admin-input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid #333; color: white; border-radius: 10px; box-sizing: border-box; }
         .row-edit { display: grid; grid-template-columns: 2fr 1fr auto; gap: 8px; margin-bottom: 8px; }
 
-        /* Post Account List */
         .acc-post { background: var(--glass); border-radius: 20px; margin-bottom: 20px; padding: 15px; border: 1px solid #333; backdrop-filter: blur(10px); }
         .acc-img-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
         .acc-img-grid img { width: 100%; border-radius: 10px; aspect-ratio: 1/1; object-fit: cover; }
 
-        /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: #111; border: 1px solid var(--neon-blue); border-radius: 25px; padding: 25px; width: 100%; max-width: 350px; text-align: center; }
         .kpay-box { background: #000; border: 1px dashed #555; padding: 15px; border-radius: 15px; margin: 15px 0; color: var(--neon-blue); font-size: 20px; font-weight: bold; }
@@ -93,29 +87,21 @@
             <button class="adm-tab" onclick="switchAdmTab(this,'payment')">Payment</button>
             <button class="adm-tab" onclick="switchAdmTab(this,'acc-post')">Post Acc</button>
         </div>
-
         <div id="adm-sec-prices" class="adm-content">
-            <div class="admin-nav-tabs" style="background:#000; padding:10px; border-radius:10px;">
-                <button onclick="switchPriceTab('MLBB')">MLBB</button>
-                <button onclick="switchPriceTab('PUBG')">PUBG</button>
-                <button onclick="switchPriceTab('HEARTOPIA')">Heartopia</button>
-                <button onclick="switchPriceTab('TG')">TG</button>
-            </div>
+            <div class="admin-nav-tabs" style="background:#000; padding:10px; border-radius:10px;"><button onclick="switchPriceTab('MLBB')">MLBB</button><button onclick="switchPriceTab('PUBG')">PUBG</button><button onclick="switchPriceTab('HEARTOPIA')">Heartopia</button><button onclick="switchPriceTab('TG')">TG</button></div>
             <div id="price-editor-rows" class="admin-card"></div>
         </div>
-
         <div id="adm-sec-visuals" class="adm-content" style="display:none">
             <div class="admin-card">
-                <p>BG Image: <input type="file" id="bg-f" class="admin-input"></p>
-                <p>Shop Logo: <input type="file" id="logo-f" class="admin-input"></p>
+                <p>BG Image: <input type="file" id="bg-f" class="admin-input" accept="image/*"></p>
+                <p>Shop Logo: <input type="file" id="logo-f" class="admin-input" accept="image/*"></p>
                 <hr style="border:0.1px solid #333; margin:15px 0;">
-                <p>Slide 1: <input type="file" id="sl0-f" class="admin-input"><input type="text" id="sl0-t" class="admin-input" placeholder="Text"></p>
-                <p>Slide 2: <input type="file" id="sl1-f" class="admin-input"><input type="text" id="sl1-t" class="admin-input" placeholder="Text"></p>
-                <p>Slide 3: <input type="file" id="sl2-f" class="admin-input"><input type="text" id="sl2-t" class="admin-input" placeholder="Text"></p>
+                <p>S1: <input type="file" id="sl0-f" class="admin-input" accept="image/*"><input type="text" id="sl0-t" class="admin-input" placeholder="Text"></p>
+                <p>S2: <input type="file" id="sl1-f" class="admin-input" accept="image/*"><input type="text" id="sl1-t" class="admin-input" placeholder="Text"></p>
+                <p>S3: <input type="file" id="sl2-f" class="admin-input" accept="image/*"><input type="text" id="sl2-t" class="admin-input" placeholder="Text"></p>
                 <button class="btn-buy" style="width:100%" onclick="saveVisuals()">SAVE ALL SETTINGS</button>
             </div>
         </div>
-
         <div id="adm-sec-payment" class="adm-content" style="display:none">
             <div class="admin-card">
                 <select id="adm-pay-type" class="admin-input"><option value="KPay">KPay</option><option value="Wave">Wave</option></select>
@@ -124,32 +110,26 @@
                 <button class="btn-buy" style="width:100%" onclick="savePay()">SAVE PAYMENT</button>
             </div>
         </div>
-
         <div id="adm-sec-acc-post" class="adm-content" style="display:none">
             <div class="admin-card">
                 <input type="text" id="ac-title" class="admin-input" placeholder="Acc Name">
                 <textarea id="ac-desc" class="admin-input" placeholder="Details" style="height:80px"></textarea>
-                <input type="file" id="ac-imgs" class="admin-input" multiple>
+                <input type="file" id="ac-imgs" class="admin-input" multiple accept="image/*">
                 <button class="btn-buy" style="width:100%" onclick="postAccount()">POST ACCOUNT NOW</button>
                 <button class="btn-buy" style="width:100%; background:red; margin-top:10px" onclick="clearAccounts()">DELETE ALL POSTS</button>
             </div>
         </div>
     </div>
 
-    <div id="pay-modal" class="modal"><div class="modal-content">
-        <h3 id="ord-title"></h3>
-        <div class="kpay-box" id="mod-num"></div>
-        <div id="mod-name" style="font-weight:bold;margin-bottom:20px"></div>
-        <button class="btn-buy" style="width:100%" onclick="copyAndGo()">COPY & ORDER</button>
-        <button onclick="closeModal()" style="background:none;border:none;color:#555;margin-top:15px">CANCEL</button>
-    </div></div>
+    <div id="pay-modal" class="modal"><div class="modal-content"><h3 id="ord-title"></h3><div class="kpay-box" id="mod-num"></div><div id="mod-name" style="font-weight:bold;margin-bottom:20px"></div><button class="btn-buy" style="width:100%" onclick="copyAndGo()">COPY & ORDER</button><button onclick="closeModal()" style="background:none;border:none;color:#555;margin-top:15px">CANCEL</button></div></div>
 
     <script>
-        let shopData = JSON.parse(localStorage.getItem('kimo_v5_data')) || {
-            MLBB: [["Weekly Pass","6500"],["86 Dia","4800"]], PUBG: [["60 UC","3800"]],
-            HEARTOPIA: [["60 Gems","3500"]], TG: [["1 Month","16500"]]
+        let shopData = JSON.parse(localStorage.getItem('kimo_final_v1')) || {
+            MLBB: [["Weekly Pass","6500"],["86 Dia","4800"],["172 Dia","9600"],["257 Dia","14400"],["344 Dia","19200"],["429 Dia","24000"],["706 Dia","38500"]],
+            PUBG: [["60 UC","3800"],["325 UC","16500"],["660 UC","32000"]],
+            HEARTOPIA: [["60 Gems","3500"],["300 Gems","16500"]], TG: [["1 Month","16500"],["1 Year","135000"]]
         };
-        let accountPosts = JSON.parse(localStorage.getItem('kimo_acc_v5')) || [];
+        let accountPosts = JSON.parse(localStorage.getItem('kimo_acc_v1')) || [];
         let curPriceTab = 'MLBB'; let count = 0;
 
         function nav(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(id).classList.add('active-page'); }
@@ -166,38 +146,49 @@
                 container.innerHTML += `<div class="row-edit"><input type="text" class="admin-input" value="${item[0]}" onchange="editItem(${idx},0,this.value)"><input type="number" class="admin-input" value="${item[1]}" onchange="editItem(${idx},1,this.value)"><button onclick="delItem(${idx})" style="background:red;border:none;color:white;border-radius:8px">X</button></div>`;
             });
             container.innerHTML += `<button onclick="addItem()" class="admin-input">+ Add Item</button>`;
-            localStorage.setItem('kimo_v5_data', JSON.stringify(shopData)); renderUserView();
+            localStorage.setItem('kimo_final_v1', JSON.stringify(shopData)); renderUserView();
         }
         function editItem(i,c,v) { shopData[curPriceTab][i][c]=v; renderPriceEditor(); }
         function delItem(i) { shopData[curPriceTab].splice(i,1); renderPriceEditor(); }
         function addItem() { shopData[curPriceTab].push(["New", "0"]); renderPriceEditor(); }
 
-        const toB64 = (file) => new Promise((resolve, reject) => {
-            const reader = new FileReader(); reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result); reader.onerror = (e) => reject(e);
-        });
+        async function compressImage(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader(); reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image(); img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 800; const scale = MAX_WIDTH / img.width;
+                        canvas.width = MAX_WIDTH; canvas.height = img.height * scale;
+                        const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.6)); // 0.6 quality reduces size 
+                    };
+                };
+            });
+        }
 
         async function saveVisuals() {
             try {
                 const bg = document.getElementById('bg-f').files[0];
                 const logo = document.getElementById('logo-f').files[0];
-                if(bg) localStorage.setItem('k_bg', await toB64(bg));
-                if(logo) localStorage.setItem('k_logo', await toB64(logo));
+                if(bg) localStorage.setItem('k_bg', await compressImage(bg));
+                if(logo) localStorage.setItem('k_logo', await compressImage(logo));
                 for(let i=0; i<3; i++){
                     const f = document.getElementById(`sl${i}-f`).files[0];
                     const t = document.getElementById(`sl${i}-t`).value;
-                    if(f) localStorage.setItem('k_sl_i'+i, await toB64(f));
+                    if(f) localStorage.setItem('k_sl_i'+i, await compressImage(f));
                     if(t) localStorage.setItem('k_sl_t'+i, t);
                 }
-                alert("Visual Settings Saved Successfully!"); location.reload();
-            } catch (e) { alert("Error saving visuals!"); }
+                alert("Visuals Saved!"); location.reload();
+            } catch (e) { alert("Error: Image too large! Try a smaller image."); }
         }
 
         function savePay() {
             localStorage.setItem('p_t', document.getElementById('adm-pay-type').value);
             localStorage.setItem('p_n', document.getElementById('adm-pay-num').value);
             localStorage.setItem('p_u', document.getElementById('adm-pay-name').value);
-            alert("Payment Settings Saved!");
+            alert("Saved!");
         }
 
         async function postAccount() {
@@ -205,23 +196,21 @@
                 const title = document.getElementById('ac-title').value;
                 const desc = document.getElementById('ac-desc').value;
                 const files = document.getElementById('ac-imgs').files;
-                if(!title) { alert("Please enter account title!"); return; }
+                if(!title) return alert("Title required!");
                 let imgs = [];
-                for(let f of files) { imgs.push(await toB64(f)); }
+                for(let f of files) imgs.push(await compressImage(f));
                 accountPosts.push({ title, desc, imgs });
-                localStorage.setItem('kimo_acc_v5', JSON.stringify(accountPosts));
-                alert("Account Posted Successfully!");
-                document.getElementById('ac-title').value = ''; document.getElementById('ac-desc').value = '';
-                renderUserView();
-            } catch (e) { alert("Error posting account!"); }
+                localStorage.setItem('kimo_acc_v1', JSON.stringify(accountPosts));
+                alert("Posted!"); renderUserView();
+            } catch (e) { alert("Error: Post too large!"); }
         }
 
-        function clearAccounts() { if(confirm("Delete all posts?")){ localStorage.removeItem('kimo_acc_v5'); accountPosts = []; renderUserView(); } }
+        function clearAccounts() { if(confirm("Clear all?")){ localStorage.removeItem('kimo_acc_v1'); accountPosts = []; renderUserView(); } }
 
         function openPay(item) {
             document.getElementById('ord-title').innerText = item;
-            document.getElementById('mod-num').innerText = localStorage.getItem('p_n') || "Not Set";
-            document.getElementById('mod-name').innerText = "Name: " + (localStorage.getItem('p_u') || "Not Set");
+            document.getElementById('mod-num').innerText = localStorage.getItem('p_n') || "09xxxxxx";
+            document.getElementById('mod-name').innerText = "Name: " + (localStorage.getItem('p_u') || "Kimo");
             document.getElementById('pay-modal').style.display = 'flex';
         }
         function closeModal() { document.getElementById('pay-modal').style.display='none'; }
@@ -252,3 +241,4 @@
     </script>
 </body>
 </html>
+
