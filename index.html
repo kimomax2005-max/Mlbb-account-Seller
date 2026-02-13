@@ -28,22 +28,23 @@
         .slide-overlay { width: 100%; padding: 15px; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); font-weight: bold; color: var(--neon-blue); font-size: 14px; }
 
         .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 22px; border-radius: 24px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; backdrop-filter: blur(15px); cursor: pointer; }
-        .price-item { background: rgba(0, 0, 0, 0.5); padding: 18px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-left: 5px solid var(--neon-purple); cursor: pointer; }
+        .price-item { background: rgba(0, 0, 0, 0.5); padding: 18px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-left: 5px solid var(--neon-purple); cursor: pointer; backdrop-filter: blur(10px); }
         .btn-buy { background: var(--neon-blue); color: #000; padding: 10px 25px; border-radius: 15px; font-weight: 900; border: none; }
 
-        /* Admin UI */
+        /* Admin Layout */
         .admin-nav-tabs { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 20px; padding-bottom: 5px; }
-        .adm-tab { background: #222; color: #777; padding: 10px 18px; border-radius: 10px; border: none; cursor: pointer; }
+        .adm-tab { background: #222; color: #777; padding: 10px 18px; border-radius: 10px; border: none; cursor: pointer; white-space: nowrap; }
         .adm-tab.active { background: var(--neon-blue); color: #000; font-weight: bold; }
         .admin-card { background: var(--glass); padding: 20px; border-radius: 25px; border: 1px solid #333; margin-bottom: 20px; }
-        .admin-input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid #333; color: white; border-radius: 10px; }
+        .admin-input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid #333; color: white; border-radius: 10px; box-sizing: border-box; }
+        .row-edit { display: grid; grid-template-columns: 2fr 1fr auto; gap: 8px; margin-bottom: 8px; }
 
-        /* Acc Post */
+        /* Account Posting */
         .acc-post { background: var(--glass); border-radius: 20px; margin-bottom: 20px; padding: 15px; border: 1px solid #333; }
         .acc-img-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
         .acc-img-grid img { width: 100%; border-radius: 10px; aspect-ratio: 1/1; object-fit: cover; }
 
-        /* Order Modal Center */
+        /* Center Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
         .modal-content { background: #111; border: 1px solid var(--neon-blue); border-radius: 25px; padding: 25px; width: 100%; max-width: 350px; text-align: center; }
         .kpay-box { background: #000; border: 1px dashed #555; padding: 15px; border-radius: 15px; margin: 15px 0; color: var(--neon-blue); font-size: 20px; font-weight: bold; }
@@ -82,11 +83,12 @@
             <button class="adm-tab" onclick="switchAdmTab(this,'acc-post')">Post Acc</button>
         </div>
         <div id="adm-sec-prices" class="adm-content">
+            <div class="admin-nav-tabs" style="background:#000; padding:10px; border-radius:10px;"><button onclick="switchPriceTab('MLBB')">MLBB</button><button onclick="switchPriceTab('PUBG')">PUBG</button><button onclick="switchPriceTab('HEARTOPIA')">Heartopia</button><button onclick="switchPriceTab('TG')">TG</button></div>
             <div id="price-editor-rows" class="admin-card"></div>
         </div>
         <div id="adm-sec-visuals" class="adm-content" style="display:none">
             <div class="admin-card">
-                <p>BG: <input type="file" id="bg-f" class="admin-input"></p>
+                <p>BG Image: <input type="file" id="bg-f" class="admin-input"></p>
                 <p>Logo: <input type="file" id="logo-f" class="admin-input"></p>
                 <button class="btn-buy" style="width:100%" onclick="saveVisuals()">SAVE SETTINGS</button>
             </div>
@@ -100,11 +102,11 @@
         </div>
         <div id="adm-sec-acc-post" class="adm-content" style="display:none">
             <div class="admin-card">
-                <input type="text" id="ac-title" class="admin-input" placeholder="Acc Name">
+                <input type="text" id="ac-title" class="admin-input" placeholder="Account Name">
                 <textarea id="ac-desc" class="admin-input" placeholder="Details"></textarea>
                 <input type="file" id="ac-imgs" class="admin-input" multiple>
-                <button class="btn-buy" style="width:100%" onclick="postAccount()">POST ACCOUNT</button>
-                <button class="btn-buy" style="width:100%; background:red; margin-top:10px" onclick="clearAccounts()">CLEAR ALL POSTS</button>
+                <button class="btn-buy" style="width:100%" onclick="postAccount()">POST NOW</button>
+                <button class="btn-buy" style="width:100%; background:red; margin-top:10px" onclick="clearAccounts()">DELETE ALL</button>
             </div>
         </div>
     </div>
@@ -121,13 +123,13 @@
     </div>
 
     <script>
-        let shopData = JSON.parse(localStorage.getItem('kimo_v3')) || {
-            MLBB: [["Weekly Pass","6500"],["86 Dia","4800"],["172 Dia","9600"]],
-            PUBG: [["60 UC","3800"],["325 UC","16500"]],
-            HEARTOPIA: [["60 Gems","3500"]], TG: [["1 Month","16500"]]
+        let shopData = JSON.parse(localStorage.getItem('kimo_final_v5')) || {
+            MLBB: [["Weekly Pass","6500"],["86 Dia","4800"],["172 Dia","9600"],["257 Dia","14400"],["344 Dia","19200"],["429 Dia","24000"],["706 Dia","38500"]],
+            PUBG: [["60 UC","3800"],["325 UC","16500"],["660 UC","32000"]],
+            HEARTOPIA: [["60 Gems","3500"],["300 Gems","16500"]], TG: [["1 Month","16500"],["1 Year","135000"]]
         };
-        let accountPosts = JSON.parse(localStorage.getItem('kimo_acc_v3')) || [];
-        let activeOrder = {}; let count = 0;
+        let accountPosts = JSON.parse(localStorage.getItem('kimo_acc_v5')) || [];
+        let curPriceTab = 'MLBB'; let count = 0; let activeOrder = {};
 
         function nav(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(id).classList.add('active-page'); }
         function secretAdmin() { count++; if(count==5){ count=0; nav('admin-page'); renderPriceEditor(); } setTimeout(()=>count=0, 3000); }
@@ -136,6 +138,20 @@
             document.querySelectorAll('.adm-content').forEach(c=>c.style.display='none'); document.getElementById('adm-sec-'+sec).style.display='block';
         }
 
+        function switchPriceTab(t) { curPriceTab = t; renderPriceEditor(); }
+        function renderPriceEditor() {
+            const container = document.getElementById('price-editor-rows'); container.innerHTML = `<h4>Editing ${curPriceTab}</h4>`;
+            shopData[curPriceTab].forEach((item, idx) => {
+                container.innerHTML += `<div class="row-edit"><input type="text" class="admin-input" value="${item[0]}" onchange="editItem(${idx},0,this.value)"><input type="number" class="admin-input" value="${item[1]}" onchange="editItem(${idx},1,this.value)"><button onclick="delItem(${idx})" style="background:red;border:none;color:white;border-radius:8px;width:30px">X</button></div>`;
+            });
+            container.innerHTML += `<button onclick="addItem()" class="admin-input">+ Add Item</button>`;
+            localStorage.setItem('kimo_final_v5', JSON.stringify(shopData)); renderUserView();
+        }
+        function editItem(i,c,v) { shopData[curPriceTab][i][c]=v; renderPriceEditor(); }
+        function delItem(i) { shopData[curPriceTab].splice(i,1); renderPriceEditor(); }
+        function addItem() { shopData[curPriceTab].push(["New", "0"]); renderPriceEditor(); }
+
+        // Strong Compression to avoid Storage Full
         async function compressImage(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader(); reader.readAsDataURL(file);
@@ -143,10 +159,10 @@
                     const img = new Image(); img.src = e.target.result;
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        const MAX_W = 500; const scale = MAX_W / img.width;
+                        const MAX_W = 400; const scale = MAX_W / img.width;
                         canvas.width = MAX_W; canvas.height = img.height * scale;
                         canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                        resolve(canvas.toDataURL('image/jpeg', 0.4)); // Highly compressed to save space
+                        resolve(canvas.toDataURL('image/jpeg', 0.4));
                     };
                 };
             });
@@ -157,16 +173,13 @@
                 const title = document.getElementById('ac-title').value;
                 const desc = document.getElementById('ac-desc').value;
                 const files = document.getElementById('ac-imgs').files;
-                if(!title || files.length === 0) return alert("Title and Image required!");
+                if(!title || files.length === 0) return alert("Title and Photo required!");
                 let imgs = [];
                 for(let f of files) imgs.push(await compressImage(f));
                 accountPosts.push({ title, desc, imgs });
-                localStorage.setItem('kimo_acc_v3', JSON.stringify(accountPosts));
+                localStorage.setItem('kimo_acc_v5', JSON.stringify(accountPosts));
                 alert("Posted!"); renderUserView();
-            } catch (e) { 
-                alert("Storage Full! Clearing old posts..."); 
-                accountPosts.shift(); postAccount(); // Auto-clear oldest if full
-            }
+            } catch (e) { alert("Browser memory full! Please delete some old account posts."); }
         }
 
         function openPay(game, item, price) {
@@ -178,9 +191,10 @@
             document.getElementById('pay-modal').style.display = 'flex';
         }
         function closeModal() { document.getElementById('pay-modal').style.display='none'; }
+        
         function copyAndGo() { 
             navigator.clipboard.writeText(document.getElementById('mod-num').innerText); 
-            const msg = `Order: ${activeOrder.game} - ${activeOrder.item} (${activeOrder.price} MMK)`;
+            const msg = `Order Details:%0AGame: ${activeOrder.game}%0AItem: ${activeOrder.item}%0APrice: ${activeOrder.price} MMK`;
             window.location.href=`https://t.me/Ironman2005born?text=${msg}`; 
         }
 
@@ -189,21 +203,27 @@
                 const el = document.getElementById('user-'+k);
                 if(el) el.innerHTML = shopData[k].map(i => `<div class="price-item" onclick="openPay('${k}', '${i[0]}', '${i[1]}')"><span>${i[0]}</span><b>${i[1]} MMK</b></div>`).join('');
             });
-            document.getElementById('acc-list').innerHTML = accountPosts.map(p => `<div class="acc-post"><h3>${p.title}</h3><p>${p.desc}</p><div class="acc-img-grid">${p.imgs.map(im=>`<img src="${im}">`).join('')}</div><button class="btn-buy" style="width:100%;margin-top:10px" onclick="openPay('Acc', '${p.title}', 'N/A')">BUY</button></div>`).join('');
-            const sBG = localStorage.getItem('k_bg'); if(sBG) document.body.style.backgroundImage = `url('${sBG}')`;
+            document.getElementById('acc-list').innerHTML = accountPosts.map(p => `<div class="acc-post"><h3>${p.title}</h3><p style="white-space:pre-wrap;">${p.desc}</p><div class="acc-img-grid">${p.imgs.map(im=>`<img src="${im}">`).join('')}</div><button class="btn-buy" style="width:100%;margin-top:10px" onclick="openPay('ACC', '${p.title}', 'N/A')">BUY</button></div>`).join('');
+            const sBG = localStorage.getItem('k_bg'); if(sBG) { document.body.style.backgroundImage = `url('${sBG}')`; document.getElementById('bg-layer').style.display='none'; }
+            const sLogo = localStorage.getItem('k_logo'); if(sLogo) document.getElementById('display-logo').src = sLogo;
         }
 
-        function clearAccounts() { if(confirm("Clear all?")){ localStorage.removeItem('kimo_acc_v3'); accountPosts = []; renderUserView(); } }
         function savePay() { localStorage.setItem('p_n', document.getElementById('adm-pay-num').value); localStorage.setItem('p_u', document.getElementById('adm-pay-name').value); alert("Saved!"); }
         async function saveVisuals() {
             const bg = document.getElementById('bg-f').files[0];
+            const logo = document.getElementById('logo-f').files[0];
             if(bg) localStorage.setItem('k_bg', await compressImage(bg));
-            alert("Saved!"); location.reload();
+            if(logo) localStorage.setItem('k_logo', await compressImage(logo));
+            alert("Settings Saved!"); location.reload();
         }
+        function clearAccounts() { if(confirm("Delete all?")){ localStorage.removeItem('kimo_acc_v5'); accountPosts = []; renderUserView(); } }
 
         window.onload = () => {
-            let p=0; const iv=setInterval(()=>{ p+=10; document.getElementById('percent').innerText=p+"%"; if(p>=100){ clearInterval(iv); document.getElementById('loader').style.display='none'; nav('main-page'); renderUserView(); } }, 50);
+            let p=0; const iv=setInterval(()=>{ p+=5; document.getElementById('percent').innerText=p+"%"; if(p>=100){ clearInterval(iv); document.getElementById('loader').style.display='none'; nav('main-page'); renderUserView(); startSlider(); } }, 30);
+            document.getElementById('adm-pay-num').value = localStorage.getItem('p_n')||"";
+            document.getElementById('adm-pay-name').value = localStorage.getItem('p_u')||"";
         };
+        function startSlider() { let i=0; setInterval(()=>{ i=(i+1)%3; document.getElementById('slide-track').style.transform=`translateX(-${i*33.33}%)`; }, 4000); }
     </script>
 </body>
 </html>
